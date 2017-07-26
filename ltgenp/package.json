@@ -1,0 +1,17 @@
+{
+  "name": "ltgenp",
+  "version": "1.0.0",
+  "description": "ltgen page!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "python -m SimpleHTTPServer 2000"
+  },
+  "author": "someblue",
+  "license": "ISC",
+  "dependencies": {
+    "ace-builds": "^1.2.8",
+    "mustache": "^2.3.0",
+    "store": "^2.0.12"
+  }
+}

@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+
+<link rel="stylesheet" type="text/css" href="src/styles/index.css">
+<link rel="stylesheet" type="text/css" href="node_modules/ace-builds/src-noconflict/twilight.css">
+
+<body onload="onLoad()" class="flex-column-aligner">
+
+    <div class="percent-100-w
+                size-100-h
+                vh-center-aligner">
+        <div class="h-center-aligner">
+            <a href="https://github.com/janl/mustache.js#templates" target="_blank">Template Usage</a>
+
+            <div class="flex-row-aligner">
+                <button class="size-100-w
+                            size-50-h" onclick="generate()">
+                    Generate!
+                </button>
+                <div class="size-15-w"></div>
+                <button class="size-100-w
+                            size-50-h" onclick="copyResult()">
+                    Copy
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="percent-100-w
+                flex-remain-space
+                h-space-between-aligner">
+        <div class="percent-100-h
+                    percent-30-w">
+            <div id="template" class="percent-100-wh"></div>
+        </div>
+        <div class="percent-100-h
+                    percent-30-w">
+            <div id="data" class="percent-100-wh"></div>
+        </div>
+        <div class="percent-100-h
+                    percent-30-w">
+            <div id="result" class="percent-100-wh"></div>
+        </div>
+    </div>
+
+</body>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="node_modules/mustache/mustache.js"></script>
+<script src="node_modules/store/dist/store.legacy.min.js"></script>
+<script src="node_modules/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="src/scripts/helper.js"></script>
+<script src="src/scripts/index.js"></script>
+
+</html>
