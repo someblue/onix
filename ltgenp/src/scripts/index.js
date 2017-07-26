@@ -34,9 +34,7 @@ function onLoad() {
 
 function generate() {
     console.log('===== generating! =====');
-    var template, data, result;
-
-    template = $template.content;
+    var data, result;
 
     try {
         eval(`var dataObj=${$data.content}`);
@@ -46,9 +44,9 @@ function generate() {
         return;
     }
 
-    result = Mustache.render(template, data);
+    result = template.render($template.content, data);
 
-    console.log('template: ', template);
+    console.log('template: ', $template.content);
     console.log('data: ', data);
     console.log('result: ', result);
 
