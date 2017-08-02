@@ -1,43 +1,59 @@
-var pipes = [
-    {
-        name: 'camelCase',
-        func: function (str, upperFirst) { return upperFirst ? _.upperFirst(_.camelCase(str)) : _.camelCase(str); }
+var tsTypeMap = {
+    "uint64": {
+        "type": "number",
+        "zero": 0,
     },
-    {
-        name: 'kebabCase',
-        func: function (str) { return _.kebabCase(str); }
+    "int64": {
+        "type": "number",
+        "zero": 0,
     },
-    {
-        name: 'lowerCase',
-        func: function (str) { return _.lowerCase(str); }
+    "int": {
+        "type": "number",
+        "zero": 0,
     },
-    {
-        name: 'snakeCase',
-        func: function (str) { return _.snakeCase(str); }
+    "uint": {
+        "type": "number",
+        "zero": 0,
     },
-    {
-        name: 'startCase',
-        func: function (str) { return _.startCase(str); }
+    "string": {
+        "type": "string",
+        "zero": "''",
     },
-    {
-        name: 'upperCase',
-        func: function (str) { return _.upperCase(str); }
+    "bool": {
+        "type": "boolean",
+        "zero": false,
     },
+};
+
+var tsPipes = [
     {
-        name: 'goEntityProp',
+        name: 'tsEntityProp',
         func: function (p) {
             if (p.d) {
-                if (p.d.type === 'id') {
+                if (p.d.type == 'id') {
                     return 'string';
                 }
+            } else {
+                return tsTypeMap[p.t].type;
             }
-            return p.t;
         }
     },
     {
-        name: 'goPropDatalize',
+        name: 'tsPropZero',
         func: function (p) {
-            var name = _.upperFirst(_.camelCase(p.n));
+            if (p.d) {
+                if (p.d.type == 'id') {
+                    return 'EntityIdUtil.createEntityId(EntityIdUtil.newCreateEntityIdPart())';
+                }
+            } else {
+                return tsTypeMap[p.t].zero;
+            }
+        }
+    },
+    {
+        name: 'tsPropFromJson',
+        func: function (p) {
+            var camelName = _.camelCase(p.n);
             var funcName, args;
             if (p.d) {
                 funcName = 'EntityIdPtrValue';
@@ -54,7 +70,7 @@ var pipes = [
         }
     },
     {
-        name: 'goPropEntitilize',
+        name: 'goPropToJson',
         func: function (p) {
             var name = _.upperFirst(_.camelCase(p.n));
             var funcName, args;
@@ -71,10 +87,5 @@ var pipes = [
             }
             return `out.${name} = util.${funcName}(${args.join(',')})`;
         }
-    }
+    },
 ];
-
-// register pipes
-pipes.forEach(pipe => {
-    template.defaults.imports[pipe.name] = pipe.func;
-});
