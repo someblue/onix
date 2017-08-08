@@ -1,7 +1,7 @@
 {
-  "name": "ltgenp-server",
+  "name": "onix-server",
   "version": "1.0.0",
-  "description": "server for ltgenp",
+  "description": "server for onix",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

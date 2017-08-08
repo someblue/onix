@@ -1,7 +1,7 @@
 {
-  "name": "ltgenp",
+  "name": "onix",
   "version": "1.0.0",
-  "description": "ltgen page!",
+  "description": "onix web",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
