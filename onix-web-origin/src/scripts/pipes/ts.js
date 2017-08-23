@@ -32,6 +32,8 @@ var tsPipes = [
             if (p.d) {
                 if (p.d.type == 'id') {
                     return 'string';
+                } else if (p.d.type == 'enum') {
+                    return _.upperFirst(_.camelCase(p.d.n)) + 'Enum';
                 }
             } else {
                 return tsTypeMap[p.t].type;
@@ -44,6 +46,8 @@ var tsPipes = [
             if (p.d) {
                 if (p.d.type == 'id') {
                     return 'EntityIdUtil.createEntityId(EntityIdUtil.newCreateEntityIdPart())';
+                } else if (p.d.type == 'enum') {
+                    return 'null';
                 }
             } else {
                 return tsTypeMap[p.t].zero;
