@@ -117,3 +117,31 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+.top-0 {
+  top: 0;
+}
+
+.right-0 {
+  right: 0;
+}
+
+.bottom-0 {
+  bottom: 0;
+}
+
+.left-0 {
+  left: 0;
+}
+
+.abs-pos {
+  position: absolute;
+}
+
+.rel-pos {
+  position: relative;
+}
+
+.z-idx-1 {
+  z-index: 1;
+}

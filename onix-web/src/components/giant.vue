@@ -17,16 +17,28 @@
     </div>
 
     <div class="percent-100-w flex-remain-space h-space-between-aligner">
-      <div class="percent-100-h percent-30-w">
-        <div id="template" class="percent-100-wh"></div>
+      <div class="percent-100-h percent-30-w rel-pos" @mouseover="overTmpl = true" @mouseleave="overTmpl = false">
+        <div id="template" class="percent-100-wh">
+        </div>
+        <i-button shape="circle" icon="more" class="abs-pos z-idx-1 top-0 right-0" v-show="overTmpl" @click="modalTmpl = true">
+        </i-button>
       </div>
-      <div class="percent-100-h percent-30-w">
-        <div id="data" class="percent-100-wh"></div>
+      <div class="percent-100-h percent-30-w rel-pos" @mouseover="overData = true" @mouseleave="overData = false">
+        <div id="data" class="percent-100-wh">
+        </div>
+        <i-button shape="circle" icon="more" class="abs-pos z-idx-1 top-0 right-0" v-show="overData">
+        </i-button>
       </div>
       <div class="percent-100-h percent-30-w">
         <div id="result" class="percent-100-wh"></div>
       </div>
     </div>
+
+    <Modal v-model="modalTmpl" title="Template Setting">
+      <i-select v-model="choosenTmpl" filterable>
+        <Option v-for="e in tmplNames" :value="e" :key="e">{{ e }}</Option>
+      </i-select>
+    </Modal>
   </div>
 </template>
 
@@ -48,6 +60,11 @@ export default {
       templateEditor: null,
       dataEditor: null,
       resultEditor: null,
+      overTmpl: false,
+      overData: false,
+      modalTmpl: false,
+      choosenTmpl: '',
+      tmplNames: ['go-entity', 'ts-entity', 'higen-object', 'higen-property'],
     }
   },
   computed: {
