@@ -36,6 +36,8 @@ export default [
           return 'string'
         } else if (p.d.type === 'enum') {
           return _.upperFirst(_.camelCase(p.d.n)) + 'Enum'
+        } else if (p.d.type === 'array') {
+          return tsTypeMap[p.d.item].type + '[]'
         }
       } else {
         return tsTypeMap[p.t].type
@@ -50,6 +52,8 @@ export default [
           return 'EntityIdUtil.createEntityId(EntityIdUtil.newCreateEntityIdPart())'
         } else if (p.d.type === 'enum') {
           return 'null'
+        } else if (p.d.type === 'array') {
+          return '[]'
         }
       } else {
         return tsTypeMap[p.t].zero

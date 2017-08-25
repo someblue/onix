@@ -38,11 +38,17 @@
       <i-select v-model="choosenTmpl" filterable>
         <Option v-for="e in tmplNames" :value="e" :key="e">{{ e }}</Option>
       </i-select>
+      <div style="width:300px;height:300px;">
+        <code-editor :id="'test-ce'" :content.sync="choosenTmpl">
+        </code-editor>
+      </div>
     </Modal>
   </div>
 </template>
 
 <script>
+import CodeEditor from './code-editor.vue'
+
 import ace from 'brace'
 import store from 'store'
 import generator from 'onix-core/generator'
@@ -54,6 +60,9 @@ import 'brace/theme/tomorrow'
 
 export default {
   name: 'giant',
+  components: {
+    CodeEditor
+  },
   data() {
     return {
       msg: 'nothing',
