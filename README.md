@@ -20,3 +20,4 @@ npm start
 - [ ] Account system
 - [ ] User scope template set and data set
 - [ ] Combine of templates
+- [ ] Switch of YAML/JSON data parser
