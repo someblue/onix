@@ -51,6 +51,26 @@ body {
   height: 100px;
 }
 
+.vh-50-h {
+  height: 50vh;
+}
+
+.vh-60-h {
+  height: 60vh;
+}
+
+.vh-70-h {
+  height: 70vh;
+}
+
+.vh-80-h {
+  height: 80vh;
+}
+
+.vh-100-h {
+  height: 100vh;
+}
+
 .h-center-aligner {
   display: -ms-flexbox;
   display: -webkit-flex;

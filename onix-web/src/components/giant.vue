@@ -18,27 +18,28 @@
 
     <div class="percent-100-w flex-remain-space h-space-between-aligner">
       <div class="percent-100-h percent-30-w rel-pos" @mouseover="overTmpl = true" @mouseleave="overTmpl = false">
-        <div id="template" class="percent-100-wh">
-        </div>
+        <code-editor class="percent-100-wh" :id="'template'" :content.sync="templateEditorContent">
+        </code-editor>
         <i-button shape="circle" icon="more" class="abs-pos z-idx-1 top-0 right-0" v-show="overTmpl" @click="modalTmpl = true">
         </i-button>
       </div>
       <div class="percent-100-h percent-30-w rel-pos" @mouseover="overData = true" @mouseleave="overData = false">
-        <div id="data" class="percent-100-wh">
-        </div>
+        <code-editor class="percent-100-wh" :id="'data'" language="javascript" :content.sync="dataEditorContent">
+        </code-editor>
         <i-button shape="circle" icon="more" class="abs-pos z-idx-1 top-0 right-0" v-show="overData">
         </i-button>
       </div>
       <div class="percent-100-h percent-30-w">
-        <div id="result" class="percent-100-wh"></div>
+        <code-editor class="percent-100-wh" :id="'result'" :content.sync="resultEditorContent">
+        </code-editor>
       </div>
     </div>
 
-    <Modal v-model="modalTmpl" title="Template Setting">
-      <i-select v-model="choosenTmpl" filterable>
+    <Modal v-model="modalTmpl" title="Template Setting" class-name="v-center-aligner" :styles="{top: '0px'}" width="80" @on-ok="onChooseTmpl">
+      <i-select v-model="choosenTmpl" filterable autofocus>
         <Option v-for="e in tmplNames" :value="e" :key="e">{{ e }}</Option>
       </i-select>
-      <div style="width:300px;height:300px;">
+      <div class="percent-100-wh vh-60-h">
         <code-editor :id="'test-ce'" :content.sync="choosenTmpl">
         </code-editor>
       </div>
@@ -49,14 +50,9 @@
 <script>
 import CodeEditor from './code-editor.vue'
 
-import ace from 'brace'
 import store from 'store'
 import generator from 'onix-core/generator'
 import copyToClipboard from 'util/clipboard.js'
-
-import 'brace/mode/javascript'
-import 'brace/mode/plain_text'
-import 'brace/theme/tomorrow'
 
 export default {
   name: 'giant',
@@ -65,10 +61,9 @@ export default {
   },
   data() {
     return {
-      msg: 'nothing',
-      templateEditor: null,
-      dataEditor: null,
-      resultEditor: null,
+      templateEditorContent: '',
+      dataEditorContent: '',
+      resultEditorContent: '',
       overTmpl: false,
       overData: false,
       modalTmpl: false,
@@ -76,47 +71,19 @@ export default {
       tmplNames: ['go-entity', 'ts-entity', 'higen-object', 'higen-property'],
     }
   },
-  computed: {
-    resultContent: function() {
-      return this.resultEditor ? this.resultEditor.content : ''
-    }
-  },
   mounted: function() {
-    this.templateEditor = this.setupEditor('template', 'plain_text')
-    this.dataEditor = this.setupEditor('data', 'javascript')
-    this.resultEditor = this.setupEditor('result', 'plain_text')
-
-    this.bindContentProperty(this.templateEditor)
-    this.bindContentProperty(this.dataEditor)
-    this.bindContentProperty(this.resultEditor)
-
-    this.templateEditor.content = store.get('template') || 'Hello {{ name }}!'
-    this.dataEditor.content = store.get('data') || '{"name": "Luke"}'
+    this.templateEditorContent = store.get('template') || 'Hello {{ name }}!'
+    this.dataEditorContent = store.get('data') || '{"name": "Luke"}'
 
     this.generate()
   },
   methods: {
-    setupEditor: function(id, language) {
-      var editor = ace.edit(id)
-      editor.setTheme('ace/theme/tomorrow')
-      editor.getSession().setMode(`ace/mode/${language}`)
-      editor.getSession().on('change', function(e) {
-        store.set(id, editor.getValue())
-      })
-      return editor
-    },
-    bindContentProperty: function(obj) {
-      Object.defineProperty(obj, "content", {
-        get: function() { return this.getValue() },
-        set: function(v) { this.setValue(v, 1) },
-      })
-    },
     generate: function() {
       console.log('===== generating! =====')
       var data, result
 
       try {
-        var dataObj = JSON.parse(this.dataEditor.content)
+        var dataObj = JSON.parse(this.dataEditorContent)
         data = dataObj
       } catch (e) {
         console.log('parse data error: ' + e)
@@ -124,17 +91,20 @@ export default {
         return
       }
 
-      result = generator(this.templateEditor.content, data)
+      result = generator(this.templateEditorContent, data)
 
-      console.log('template: ', this.templateEditor.content)
+      console.log('template: ', this.templateEditorContent)
       console.log('data: ', data)
       console.log('result: ', result)
 
-      this.resultEditor.content = result
+      this.resultEditorContent = result
     },
     copy: function() {
-      copyToClipboard(this.resultEditor.content)
+      copyToClipboard(this.resultEditorContent)
     },
+    onChooseTmpl: function() {
+      console.log('on choose tmpl')
+    }
   }
 }
 </script>
