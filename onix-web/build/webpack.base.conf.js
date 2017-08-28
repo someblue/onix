@@ -1,4 +1,5 @@
 var webpack = require('webpack')
+var HtmlWebpackPlugin = require('html-webpack-plugin')
 var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
@@ -36,6 +37,9 @@ module.exports = {
   plugins: [
     new webpack.ProvidePlugin({
       $: 'jquery',
+    }),
+    new HtmlWebpackPlugin({
+      favicon: 'favicon.ico',
     }),
   ],
   module: {
@@ -82,6 +86,10 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]'),
         },
+      },
+      {
+        test: /\.ico$/,
+        loader: 'file-loader?name=[name].[ext]',
       },
     ],
   },
