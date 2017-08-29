@@ -3,7 +3,7 @@
   </div>
 </template>
 
-<<script>
+<script>
 import ace from 'brace'
 import 'brace/mode/javascript'
 import 'brace/mode/plain_text'

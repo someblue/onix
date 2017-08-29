@@ -10,6 +10,6 @@ export default function(name) {
         args = [`[${name}] `].concat(args)
         console.log.apply(this, args)
       }
-    }
+    },
   }
 }
