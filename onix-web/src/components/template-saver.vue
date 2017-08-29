@@ -1,8 +1,12 @@
 <template>
-  <Modal :value="value" @input="onModalValue" title="Template Saver" @on-ok="onSave">
+  <Modal :value="value"
+    @input="onModalValue"
+    title="Template Saver"
+    @on-ok="onSave">
     <i-form>
       <FormItem label="Name">
-        <i-input v-model="tmplName" autofocus>
+        <i-input v-model="tmplName"
+          autofocus>
         </i-input>
       </FormItem>
     </i-form>
@@ -32,11 +36,6 @@ export default {
     return {
       tmplName: this.name,
     }
-  },
-  mounted: function() {
-    templatesModel.templates$.subscribe(val => {
-      console.log('templates change: ', val)
-    })
   },
   methods: {
     onModalValue: function(e) {

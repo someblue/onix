@@ -2,14 +2,17 @@
   <div class="flex-column-aligner percent-100-wh">
     <div class="percent-100-w size-100-h vh-center-aligner">
       <div class="h-center-aligner">
-        <a href="https://aui.github.io/art-template/docs/syntax.html" target="_blank">Template Usage</a>
+        <a href="https://aui.github.io/art-template/docs/syntax.html"
+          target="_blank">Template Usage</a>
 
         <div class="flex-row-aligner">
-          <button class="size-100-w size-50-h" @click="generate()">
+          <button class="size-100-w size-50-h"
+            @click="generate()">
             Generate!
           </button>
           <div class="size-15-w"></div>
-          <button class="size-100-w size-50-h" @click="copy()">
+          <button class="size-100-w size-50-h"
+            @click="copy()">
             Copy
           </button>
         </div>
@@ -17,40 +20,56 @@
     </div>
 
     <div class="percent-100-w flex-remain-space h-space-between-aligner">
-      <div class="percent-100-h percent-30-w rel-pos" @mouseover="overTmpl = true" @mouseleave="overTmpl = false">
-        <code-editor class="percent-100-wh" :id="'template'" :content.sync="templateEditorContent">
+      <div class="percent-100-h percent-30-w rel-pos"
+        @mouseover="overTmpl = true"
+        @mouseleave="overTmpl = false">
+        <code-editor class="percent-100-wh"
+          :id="'template'"
+          :content.sync="templateEditorContent">
         </code-editor>
         <div class="abs-pos z-idx-1 top-0 right-0 flex-row-aligner">
-          <i-button shape="circle" icon="ios-copy" v-show="overTmpl" @click="openTemplateSaver = true">
+          <i-button shape="circle"
+            icon="ios-copy"
+            v-show="overTmpl"
+            @click="openTemplateSaver = true">
           </i-button>
-          <i-button shape="circle" icon="more" v-show="overTmpl" @click="modalTmpl = true">
+          <i-button shape="circle"
+            icon="more"
+            v-show="overTmpl"
+            @click="openTemplateSelector = true">
           </i-button>
         </div>
       </div>
-      <div class="percent-100-h percent-30-w rel-pos" @mouseover="overData = true" @mouseleave="overData = false">
-        <code-editor class="percent-100-wh" :id="'data'" language="javascript" :content.sync="dataEditorContent">
+      <div class="percent-100-h percent-30-w rel-pos"
+        @mouseover="overData = true"
+        @mouseleave="overData = false">
+        <code-editor class="percent-100-wh"
+          :id="'data'"
+          language="javascript"
+          :content.sync="dataEditorContent">
         </code-editor>
-        <i-button shape="circle" icon="more" class="abs-pos z-idx-1 top-0 right-0" v-show="overData">
+        <i-button shape="circle"
+          icon="more"
+          class="abs-pos z-idx-1 top-0 right-0"
+          v-show="overData">
         </i-button>
       </div>
       <div class="percent-100-h percent-30-w">
-        <code-editor class="percent-100-wh" :id="'result'" :content.sync="resultEditorContent">
+        <code-editor class="percent-100-wh"
+          :id="'result'"
+          :content.sync="resultEditorContent">
         </code-editor>
       </div>
     </div>
 
-    <Modal v-model="modalTmpl" title="Template Setting" class-name="v-center-aligner" :styles="{top: '0px'}" width="80" @on-ok="onChooseTmpl">
-      <i-select v-model="choosenTmpl" filterable>
-        <Option v-for="e in tmplNames" :value="e" :key="e">{{ e }}</Option>
-      </i-select>
-      <div class="percent-100-wh vh-60-h">
-        <code-editor :id="'test-ce'" :content.sync="choosenTmpl">
-        </code-editor>
-      </div>
-    </Modal>
-
-    <template-saver v-model="openTemplateSaver" :name="choosenTmpl" :content="templateEditorContent">
+    <template-saver v-model="openTemplateSaver"
+      :name="tmplName"
+      :content="templateEditorContent">
     </template-saver>
+
+    <template-selector v-model="openTemplateSelector"
+      @on-select="onSelectTemplate">
+    </template-selector>
 
   </div>
 </template>
@@ -58,6 +77,7 @@
 <script>
 import CodeEditor from './code-editor.vue'
 import TemplateSaver from './template-saver.vue'
+import TemplateSelector from './template-selector.vue'
 
 import store from 'store'
 import generator from 'onix-core/generator'
@@ -68,6 +88,7 @@ export default {
   components: {
     CodeEditor,
     TemplateSaver,
+    TemplateSelector,
   },
   data() {
     return {
@@ -76,9 +97,8 @@ export default {
       resultEditorContent: '',
       overTmpl: false,
       overData: false,
-      modalTmpl: false,
-      choosenTmpl: '',
-      tmplNames: ['go-entity', 'ts-entity', 'higen-object', 'higen-property'],
+      tmplName: '',
+      openTemplateSelector: false,
       openTemplateSaver: false,
     }
   },
@@ -113,9 +133,11 @@ export default {
     copy: function() {
       copyToClipboard(this.resultEditorContent)
     },
-    onChooseTmpl: function() {
-      console.log('on choose tmpl')
-    },
+    onSelectTemplate: function(e) {
+      console.log('on tmpl select: ', e)
+      this.tmplName = e.name
+      this.templateEditorContent = e.content
+    }
   }
 }
 </script>

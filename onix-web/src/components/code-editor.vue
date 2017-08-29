@@ -1,5 +1,6 @@
 <template>
-  <div :id="id" class="percent-100-wh">
+  <div :id="id"
+    class="percent-100-wh">
   </div>
 </template>
 
@@ -9,6 +10,7 @@ import 'brace/mode/javascript'
 import 'brace/mode/plain_text'
 import 'brace/theme/tomorrow'
 
+// TODO: add readonly option
 export default {
   name: 'code-editor',
   props: {

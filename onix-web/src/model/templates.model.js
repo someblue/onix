@@ -29,6 +29,10 @@ var model = {
       this.addTemplate(tmplName, content)
     }
   },
+  getTemplate: function(tmplName) {
+    var idx = this.templates.findIndex(e => e.name === tmplName)
+    return idx >= 0 ? this.templates[idx].content : ''
+  },
   removeTemplate: function(tmplName) {
     var idx = this.templates.findIndex(e => e.name === tmplName)
     if (idx >= 0) {
