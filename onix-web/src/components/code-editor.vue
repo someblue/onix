@@ -30,11 +30,12 @@ export default {
   data() {
     return {
       editor: null,
+      currentContent: this.content,
     }
   },
   watch: {
     content: function(val) {
-      this.editor.content = val
+      this.setCurrentContent(val)
     },
   },
   mounted: function() {
@@ -42,12 +43,20 @@ export default {
     this.bindContentProperty(this.editor)
   },
   methods: {
+    setCurrentContent: function(val) {
+      if (val === this.currentContent) {
+        return
+      }
+      this.currentContent = val
+      this.editor.setValue(val, 1)
+    },
     setupEditor: function(id, language) {
       var editor = ace.edit(id)
       editor.setTheme('ace/theme/tomorrow')
       editor.getSession().setMode(`ace/mode/${language}`)
       editor.getSession().on('change', (e) => {
-        this.$emit('update:content', this.editor.getValue());
+        this.currentContent = this.editor.getValue()
+        this.$emit('update:content', this.currentContent)
       })
       return editor
     },

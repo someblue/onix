@@ -25,7 +25,8 @@
         @mouseleave="overTmpl = false">
         <code-editor class="percent-100-wh"
           :id="'template'"
-          :content.sync="templateEditorContent">
+          :content.sync="templateEditorContent"
+          @update:content="onTemplateEditorContentChange">
         </code-editor>
         <div class="abs-pos z-idx-1 top-0 right-0 flex-row-aligner">
           <i-button shape="circle"
@@ -46,7 +47,8 @@
         <code-editor class="percent-100-wh"
           :id="'data'"
           language="javascript"
-          :content.sync="dataEditorContent">
+          :content.sync="dataEditorContent"
+          @update:content="onDataEditorContentChange">
         </code-editor>
         <i-button shape="circle"
           icon="more"
@@ -134,10 +136,15 @@ export default {
       copyToClipboard(this.resultEditorContent)
     },
     onSelectTemplate: function(e) {
-      console.log('on tmpl select: ', e)
       this.tmplName = e.name
       this.templateEditorContent = e.content
-    }
+    },
+    onTemplateEditorContentChange: function(e) {
+      store.set('template', e)
+    },
+    onDataEditorContentChange: function(e) {
+      store.set('data', e)
+    },
   }
 }
 </script>

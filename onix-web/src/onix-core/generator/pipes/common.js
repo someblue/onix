@@ -25,4 +25,8 @@ export default [
     name: 'upperCase',
     func: function(str) { return _.upperCase(str) },
   },
+  {
+    name: 'toUpper',
+    func: function(str) { return _.toUpper(str) },
+  },
 ]
