@@ -2,29 +2,34 @@ import _ from 'lodash'
 
 var tsTypeMap = {
   'uint64': {
-    'type': 'number',
+    't': 'number',
     'zero': 0,
   },
   'int64': {
-    'type': 'number',
+    't': 'number',
     'zero': 0,
   },
   'int': {
-    'type': 'number',
+    't': 'number',
     'zero': 0,
   },
   'uint': {
-    'type': 'number',
+    't': 'number',
     'zero': 0,
   },
   'string': {
-    'type': 'string',
+    't': 'string',
     'zero': "''",
   },
   'bool': {
-    'type': 'boolean',
+    't': 'boolean',
     'zero': false,
   },
+}
+
+// Force upper first. If want no upper first, just use _.camelCase
+var camel = function(str) {
+  return _.upperFirst(_.camelCase(str))
 }
 
 export default [
@@ -32,15 +37,17 @@ export default [
     name: 'tsEntityProp',
     func: function(p) {
       if (p.d) {
-        if (p.d.type === 'id') {
+        if (p.d.t === 'id') {
           return 'string'
-        } else if (p.d.type === 'enum') {
-          return _.upperFirst(_.camelCase(p.d.n)) + 'Enum'
-        } else if (p.d.type === 'array') {
-          return tsTypeMap[p.d.item].type + '[]'
+        } else if (p.d.t === 'enum') {
+          return camel(p.d.n) + 'Enum'
+        } else if (p.d.t === 'array') {
+          return tsTypeMap[p.d.item].t + '[]'
+        } else if (p.d.t === 'obj') {
+          return camel(p.d.n)
         }
       } else {
-        return tsTypeMap[p.t].type
+        return tsTypeMap[p.t].t
       }
     },
   },
@@ -48,12 +55,14 @@ export default [
     name: 'tsPropZero',
     func: function(p) {
       if (p.d) {
-        if (p.d.type === 'id') {
+        if (p.d.t === 'id') {
           return 'EntityIdUtil.createEntityId(EntityIdUtil.newCreateEntityIdPart())'
-        } else if (p.d.type === 'enum') {
+        } else if (p.d.t === 'enum') {
           return 'null'
-        } else if (p.d.type === 'array') {
+        } else if (p.d.t === 'array') {
           return '[]'
+        } else if (p.d.t === 'obj') {
+          return 'null'
         }
       } else {
         return tsTypeMap[p.t].zero
@@ -63,38 +72,22 @@ export default [
   {
     name: 'tsPropFromJson',
     func: function(p) {
-      var funcName, args
-      if (p.d) {
-        funcName = 'EntityIdPtrValue'
-        args = [
-          `src.${name}`,
-        ]
-      } else {
-        funcName = `${_.upperFirst(p.t)}PtrValue`
-        args = [
-          `src.${name}`,
-        ]
+      var res = `jsonObject.${p.n}`
+      if (p.d && p.d.t === 'obj') {
+        res = `${camel(p.d.n)}.fromJson(${res})`
       }
-      return `out.Set${name}(util.${funcName}(${args.join(', ')}))`
+      return res
     },
   },
   {
-    name: 'goPropToJson',
+    name: 'tsPropToJson',
     func: function(p) {
-      var name = _.upperFirst(_.camelCase(p.n))
-      var funcName, args
-      if (p.d) {
-        funcName = 'EntityIdPtr'
-        args = [
-          `src.${name}()`,
-        ]
-      } else {
-        funcName = `${_.upperFirst(p.t)}Ptr`
-        args = [
-          `src.${name}()`,
-        ]
+      var camelName = _.camelCase(p.n)
+      var res = `entity.${camelName}`
+      if (p.d && p.d.t === 'obj') {
+        res = `${camel(p.d.n)}.toJson(${res})`
       }
-      return `out.${name} = util.${funcName}(${args.join(',')})`
+      return res
     },
   },
 ]
