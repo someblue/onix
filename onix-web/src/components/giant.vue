@@ -42,19 +42,26 @@
         </div>
       </div>
       <div class="percent-100-h percent-30-w rel-pos"
-        @mouseover="overData = true"
-        @mouseleave="overData = false">
+        @mouseover="overSchema = true"
+        @mouseleave="overSchema = false">
         <code-editor class="percent-100-wh"
-          :id="'data'"
+          :id="'schema'"
           language="javascript"
-          :content.sync="dataEditorContent"
-          @update:content="onDataEditorContentChange">
+          :content.sync="schemaEditorContent"
+          @update:content="onSchemaEditorContentChange">
         </code-editor>
-        <i-button shape="circle"
-          icon="more"
-          class="abs-pos z-idx-1 top-0 right-0"
-          v-show="overData">
-        </i-button>
+        <div class="abs-pos z-idx-1 top-0 right-0 flex-row-aligner">
+          <i-button shape="circle"
+            icon="ios-copy"
+            v-show="overSchema"
+            @click="openSchemaSaver = true">
+          </i-button>
+          <i-button shape="circle"
+            icon="more"
+            v-show="overSchema"
+            @click="openSchemaSelector = true">
+          </i-button>
+        </div>
       </div>
       <div class="percent-100-h percent-30-w">
         <code-editor class="percent-100-wh"
@@ -73,6 +80,15 @@
       @on-select="onSelectTemplate">
     </template-selector>
 
+    <schema-saver v-model="openSchemaSaver"
+      :name="schemaName"
+      :content="schemaEditorContent">
+    </schema-saver>
+
+    <schema-selector v-model="openSchemaSelector"
+      @on-select="onSelectSchema">
+    </schema-selector>
+
   </div>
 </template>
 
@@ -80,6 +96,8 @@
 import CodeEditor from './code-editor.vue'
 import TemplateSaver from './template-saver.vue'
 import TemplateSelector from './template-selector.vue'
+import SchemaSaver from './schema-saver.vue'
+import SchemaSelector from './schema-selector.vue'
 
 import store from 'store'
 import generator from 'onix-core/generator'
@@ -91,43 +109,51 @@ export default {
     CodeEditor,
     TemplateSaver,
     TemplateSelector,
+    SchemaSaver,
+    SchemaSelector,
   },
   data() {
     return {
       templateEditorContent: '',
-      dataEditorContent: '',
+      schemaEditorContent: '',
       resultEditorContent: '',
+      // template
       overTmpl: false,
-      overData: false,
       tmplName: '',
       openTemplateSelector: false,
       openTemplateSaver: false,
+      // schema
+      overSchema: false,
+      schemaName: '',
+      openSchemaSelector: false,
+      openSchemaSaver: false,
+
     }
   },
   mounted: function() {
     this.templateEditorContent = store.get('template') || 'Hello {{ name }}!'
-    this.dataEditorContent = store.get('data') || '{"name": "Luke"}'
+    this.schemaEditorContent = store.get('schema') || '{"name": "Luke"}'
 
     this.generate()
   },
   methods: {
     generate: function() {
       console.log('===== generating! =====')
-      var data, result
+      var schema, result
 
       try {
-        var dataObj = JSON.parse(this.dataEditorContent)
-        data = dataObj
+        var schemaObj = JSON.parse(this.schemaEditorContent)
+        schema = schemaObj
       } catch (e) {
-        console.log('parse data error: ' + e)
-        alert('parse data error: ' + e)
+        console.log('parse schema error: ' + e)
+        alert('parse schema error: ' + e)
         return
       }
 
-      result = generator(this.templateEditorContent, data)
+      result = generator(this.templateEditorContent, schema)
 
       console.log('template: ', this.templateEditorContent)
-      console.log('data: ', data)
+      console.log('schema: ', schema)
       console.log('result: ', result)
 
       this.resultEditorContent = result
@@ -142,8 +168,12 @@ export default {
     onTemplateEditorContentChange: function(e) {
       store.set('template', e)
     },
-    onDataEditorContentChange: function(e) {
-      store.set('data', e)
+    onSelectSchema: function(e) {
+      this.schemaName = e.name
+      this.schemaEditorContent = e.content
+    },
+    onSchemaEditorContentChange: function(e) {
+      store.set('schema', e)
     },
   }
 }
