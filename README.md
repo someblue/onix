@@ -14,7 +14,7 @@ npm start
 
 - [x] Template set and data set storing in local storage
 - [ ] Template set and data set storing in mongodb via NodeJs server
-- [ ] Drag editor split line to resize edit area
+- [x] Drag editor split line to resize edit area
 - [ ] Switch of vertical/horizontal editor mode
 - [ ] Editable pipes
 - [ ] Account system

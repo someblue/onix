@@ -19,8 +19,14 @@
       </div>
     </div>
 
-    <div class="percent-100-w flex-remain-space h-space-between-aligner">
-      <div class="percent-100-h percent-30-w rel-pos"
+    <div class="percent-100-w flex-remain-space flex-row-aligner"
+      ref="editorContainer"
+      @mousemove="draging"
+      @mouseup="endDrag"
+      @mouseleave="endDrag">
+      <div class="percent-100-h rel-pos"
+        ref="editor1"
+        :style="editor1WidthStyle"
         @mouseover="overTmpl = true"
         @mouseleave="overTmpl = false">
         <code-editor class="percent-100-wh"
@@ -41,7 +47,14 @@
           </i-button>
         </div>
       </div>
-      <div class="percent-100-h percent-30-w rel-pos"
+
+      <div class="percent-100-h gap"
+        @mousedown="startDrag($event, 1)">
+      </div>
+
+      <div class="percent-100-h rel-pos"
+        :style="editor2WidthStyle"
+        ref="editor2"
         @mouseover="overSchema = true"
         @mouseleave="overSchema = false">
         <code-editor class="percent-100-wh"
@@ -63,7 +76,14 @@
           </i-button>
         </div>
       </div>
-      <div class="percent-100-h percent-30-w">
+
+      <div class="percent-100-h gap"
+        @mousedown="startDrag($event, 2)">
+      </div>
+
+      <div class="percent-100-h"
+        :style="editor3WidthStyle"
+        ref="editor3">
         <code-editor class="percent-100-wh"
           :id="'result'"
           :content.sync="resultEditorContent">
@@ -92,6 +112,13 @@
   </div>
 </template>
 
+<style>
+.gap {
+  width: 10px;
+  background-color: #dddee1;
+}
+</style>
+
 <script>
 import CodeEditor from './code-editor.vue'
 import TemplateSaver from './template-saver.vue'
@@ -100,6 +127,7 @@ import SchemaSaver from './schema-saver.vue'
 import SchemaSelector from './schema-selector.vue'
 
 import store from 'store'
+import lodash from 'lodash'
 import generator from 'onix-core/generator'
 import copyToClipboard from 'util/clipboard.js'
 
@@ -128,13 +156,47 @@ export default {
       openSchemaSelector: false,
       openSchemaSaver: false,
 
+      // editor zone drag line
+      isDraging: false,
+      dragingGapIdx: 0,
+      lastX: 0,
+      editorContainerWidth: 0,
+      gap1X: 0,
+      gap2X: 0,
+      gapWidth: 10,
     }
+  },
+  computed: {
+    gapWidthStyle: function() {
+      return {
+        width: this.gapWidth + 'px',
+      }
+    },
+    editor1WidthStyle: function() {
+      return {
+        width: this.gap1X + 'px',
+      }
+    },
+    editor2WidthStyle: function() {
+      return {
+        width: (this.gap2X - (this.gap1X + this.gapWidth)) + 'px',
+      }
+    },
+    editor3WidthStyle: function() {
+      return {
+        width: (this.editorContainerWidth - (this.gap2X + this.gapWidth)) + 'px',
+      }
+    },
   },
   mounted: function() {
     this.templateEditorContent = store.get('template') || 'Hello {{ name }}!'
     this.schemaEditorContent = store.get('schema') || '{"name": "Luke"}'
 
     this.generate()
+
+    this.editorContainerWidth = this.$refs.editorContainer.clientWidth
+    this.gap1X = this.editorContainerWidth * 1 / 3;
+    this.gap2X = this.editorContainerWidth * 2 / 3;
   },
   methods: {
     generate: function() {
@@ -174,6 +236,36 @@ export default {
     },
     onSchemaEditorContentChange: function(e) {
       store.set('schema', e)
+    },
+
+    startDrag: function(e, gapIdx) {
+      this.isDraging = true
+      this.lastX = e.clientX
+      this.dragingGapIdx = gapIdx
+    },
+    draging: function(e) {
+      if (this.dragingGapIdx) {
+        var dx = e.clientX - this.lastX
+        this.lastX = e.clientX
+        if (this.dragingGapIdx === 1) {
+          this.gap1X = lodash.clamp(
+            this.gap1X + dx,
+            0,
+            this.gap2X - this.gapWidth)
+        }
+        if (this.dragingGapIdx === 2) {
+          this.gap2X = lodash.clamp(
+            this.gap2X + dx,
+            this.gap1X + this.gapWidth,
+            this.editorContainerWidth - this.gapWidth)
+        }
+      }
+    },
+    endDrag: function(e) {
+      if (this.isDraging) {
+        this.isDraging = false
+        this.dragingGapIdx = 0
+      }
     },
   }
 }
