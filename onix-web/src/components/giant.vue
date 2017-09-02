@@ -48,7 +48,7 @@
         </div>
       </div>
 
-      <div class="percent-100-h gap"
+      <div class="percent-100-h gap col-resize-cursor"
         @mousedown="startDrag($event, 1)">
       </div>
 
@@ -77,7 +77,7 @@
         </div>
       </div>
 
-      <div class="percent-100-h gap"
+      <div class="percent-100-h gap col-resize-cursor"
         @mousedown="startDrag($event, 2)">
       </div>
 

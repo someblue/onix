@@ -1,0 +1,56 @@
+.percent-100-w {
+  width: 100%;
+}
+
+.percent-100-h {
+  height: 100%;
+}
+
+.percent-100-wh {
+  width: 100%;
+  height: 100%;
+}
+
+.percent-30-w {
+  width: 30%;
+}
+
+.size-15-w {
+  width: 15px;
+}
+
+.size-50-w {
+  width: 50px;
+}
+
+.size-100-w {
+  width: 100px;
+}
+
+.size-50-h {
+  height: 50px;
+}
+
+.size-100-h {
+  height: 100px;
+}
+
+.vh-50-h {
+  height: 50vh;
+}
+
+.vh-60-h {
+  height: 60vh;
+}
+
+.vh-70-h {
+  height: 70vh;
+}
+
+.vh-80-h {
+  height: 80vh;
+}
+
+.vh-100-h {
+  height: 100vh;
+}
