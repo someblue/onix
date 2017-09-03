@@ -19,96 +19,82 @@
       </div>
     </div>
 
-    <div class="percent-100-w flex-remain-space flex-row-aligner"
-      ref="editorContainer"
-      @mousemove="draging"
-      @mouseup="endDrag"
-      @mouseleave="endDrag">
-      <div class="percent-100-h rel-pos"
-        ref="editor1"
-        :style="editor1WidthStyle"
-        @mouseover="overTmpl = true"
-        @mouseleave="overTmpl = false">
-        <code-editor class="percent-100-wh"
-          :id="'template'"
-          :content.sync="templateEditorContent"
-          @update:content="onTemplateEditorContentChange">
-        </code-editor>
-        <div class="abs-pos z-idx-1 top-0 right-0 flex-row-aligner">
-          <i-button shape="circle"
-            icon="ios-copy"
-            v-show="overTmpl"
-            @click="openTemplateSaver = true">
-          </i-button>
-          <i-button shape="circle"
-            icon="more"
-            v-show="overTmpl"
-            @click="openTemplateSelector = true">
-          </i-button>
+    <div class="percent-100-w flex-remain-space">
+      <drag-resize-zone>
+        <div slot="zone1"
+          class="percent-100-wh"
+          @mouseover="overTmpl = true"
+          @mouseleave="overTmpl = false">
+          <code-editor class="percent-100-wh"
+            :id="'template'"
+            :content.sync="templateEditorContent"
+            @update:content="onTemplateEditorContentChange">
+          </code-editor>
+          <div class="abs-pos z-idx-1 top-0 right-0 flex-row-aligner">
+            <i-button shape="circle"
+              icon="ios-copy"
+              v-show="overTmpl"
+              @click="openTemplateSaver = true">
+            </i-button>
+            <i-button shape="circle"
+              icon="more"
+              v-show="overTmpl"
+              @click="openTemplateSelector = true">
+            </i-button>
+          </div>
         </div>
-      </div>
 
-      <div class="percent-100-h gap col-resize-cursor"
-        @mousedown="startDrag($event, 1)">
-      </div>
-
-      <div class="percent-100-h rel-pos"
-        :style="editor2WidthStyle"
-        ref="editor2"
-        @mouseover="overSchema = true"
-        @mouseleave="overSchema = false">
-        <code-editor class="percent-100-wh"
-          :id="'schema'"
-          language="javascript"
-          :content.sync="schemaEditorContent"
-          @update:content="onSchemaEditorContentChange">
-        </code-editor>
-        <div class="abs-pos z-idx-1 top-0 right-0 flex-row-aligner">
-          <i-button shape="circle"
-            icon="ios-copy"
-            v-show="overSchema"
-            @click="openSchemaSaver = true">
-          </i-button>
-          <i-button shape="circle"
-            icon="more"
-            v-show="overSchema"
-            @click="openSchemaSelector = true">
-          </i-button>
+        <div slot="zone2"
+          class="percent-100-wh"
+          @mouseover="overSchema = true"
+          @mouseleave="overSchema = false">
+          <code-editor class="percent-100-wh"
+            :id="'schema'"
+            language="javascript"
+            :content.sync="schemaEditorContent"
+            @update:content="onSchemaEditorContentChange">
+          </code-editor>
+          <div class="abs-pos z-idx-1 top-0 right-0 flex-row-aligner">
+            <i-button shape="circle"
+              icon="ios-copy"
+              v-show="overSchema"
+              @click="openSchemaSaver = true">
+            </i-button>
+            <i-button shape="circle"
+              icon="more"
+              v-show="overSchema"
+              @click="openSchemaSelector = true">
+            </i-button>
+          </div>
         </div>
-      </div>
 
-      <div class="percent-100-h gap col-resize-cursor"
-        @mousedown="startDrag($event, 2)">
-      </div>
+        <div slot="zone3"
+          class="percent-100-wh">
+          <code-editor class="percent-100-wh"
+            :id="'result'"
+            :content.sync="resultEditorContent">
+          </code-editor>
+        </div>
+      </drag-resize-zone>
 
-      <div class="percent-100-h"
-        :style="editor3WidthStyle"
-        ref="editor3">
-        <code-editor class="percent-100-wh"
-          :id="'result'"
-          :content.sync="resultEditorContent">
-        </code-editor>
-      </div>
+      <template-saver v-model="openTemplateSaver"
+        :name="tmplName"
+        :content="templateEditorContent">
+      </template-saver>
+
+      <template-selector v-model="openTemplateSelector"
+        @on-select="onSelectTemplate">
+      </template-selector>
+
+      <schema-saver v-model="openSchemaSaver"
+        :name="schemaName"
+        :content="schemaEditorContent">
+      </schema-saver>
+
+      <schema-selector v-model="openSchemaSelector"
+        @on-select="onSelectSchema">
+      </schema-selector>
     </div>
-
-    <template-saver v-model="openTemplateSaver"
-      :name="tmplName"
-      :content="templateEditorContent">
-    </template-saver>
-
-    <template-selector v-model="openTemplateSelector"
-      @on-select="onSelectTemplate">
-    </template-selector>
-
-    <schema-saver v-model="openSchemaSaver"
-      :name="schemaName"
-      :content="schemaEditorContent">
-    </schema-saver>
-
-    <schema-selector v-model="openSchemaSelector"
-      @on-select="onSelectSchema">
-    </schema-selector>
-
   </div>
 </template>
 
@@ -120,6 +106,7 @@
 </style>
 
 <script>
+import DragResizeZone from './drag-resize-zone'
 import CodeEditor from './code-editor.vue'
 import TemplateSaver from './template-saver.vue'
 import TemplateSelector from './template-selector.vue'
@@ -134,6 +121,7 @@ import copyToClipboard from 'util/clipboard.js'
 export default {
   name: 'giant',
   components: {
+    DragResizeZone,
     CodeEditor,
     TemplateSaver,
     TemplateSelector,
@@ -155,48 +143,13 @@ export default {
       schemaName: '',
       openSchemaSelector: false,
       openSchemaSaver: false,
-
-      // editor zone drag line
-      isDraging: false,
-      dragingGapIdx: 0,
-      lastX: 0,
-      editorContainerWidth: 0,
-      gap1X: 0,
-      gap2X: 0,
-      gapWidth: 10,
     }
-  },
-  computed: {
-    gapWidthStyle: function() {
-      return {
-        width: this.gapWidth + 'px',
-      }
-    },
-    editor1WidthStyle: function() {
-      return {
-        width: this.gap1X + 'px',
-      }
-    },
-    editor2WidthStyle: function() {
-      return {
-        width: (this.gap2X - (this.gap1X + this.gapWidth)) + 'px',
-      }
-    },
-    editor3WidthStyle: function() {
-      return {
-        width: (this.editorContainerWidth - (this.gap2X + this.gapWidth)) + 'px',
-      }
-    },
   },
   mounted: function() {
     this.templateEditorContent = store.get('template') || 'Hello {{ name }}!'
     this.schemaEditorContent = store.get('schema') || '{"name": "Luke"}'
 
     this.generate()
-
-    this.editorContainerWidth = this.$refs.editorContainer.clientWidth
-    this.gap1X = this.editorContainerWidth * 1 / 3;
-    this.gap2X = this.editorContainerWidth * 2 / 3;
   },
   methods: {
     generate: function() {
@@ -237,36 +190,6 @@ export default {
     onSchemaEditorContentChange: function(e) {
       store.set('schema', e)
     },
-
-    startDrag: function(e, gapIdx) {
-      this.isDraging = true
-      this.lastX = e.clientX
-      this.dragingGapIdx = gapIdx
-    },
-    draging: function(e) {
-      if (this.dragingGapIdx) {
-        var dx = e.clientX - this.lastX
-        this.lastX = e.clientX
-        if (this.dragingGapIdx === 1) {
-          this.gap1X = lodash.clamp(
-            this.gap1X + dx,
-            0,
-            this.gap2X - this.gapWidth)
-        }
-        if (this.dragingGapIdx === 2) {
-          this.gap2X = lodash.clamp(
-            this.gap2X + dx,
-            this.gap1X + this.gapWidth,
-            this.editorContainerWidth - this.gapWidth)
-        }
-      }
-    },
-    endDrag: function(e) {
-      if (this.isDraging) {
-        this.isDraging = false
-        this.dragingGapIdx = 0
-      }
-    },
-  }
+  },
 }
 </script>
