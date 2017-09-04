@@ -84,8 +84,21 @@ export default {
     this.zoneContainerWidth = this.$refs.zoneContainer.clientWidth
     this.gap1X = this.zoneContainerWidth * 1 / 3;
     this.gap2X = this.zoneContainerWidth * 2 / 3;
+    window.addEventListener('resize', this.resizing)
+  },
+  beforeDestroy: function() {
+    window.removeEventListener('resize', this.resizing)
   },
   methods: {
+    resizing: function() {
+      var w = this.$refs.zoneContainer.clientWidth;
+      if (w === this.zoneContainerWidth) {
+        return
+      }
+      this.gap1X = this.gap1X / this.zoneContainerWidth * w
+      this.gap2X = this.gap2X / this.zoneContainerWidth * w
+      this.zoneContainerWidth = w
+    },
     startDrag: function(e, gapIdx) {
       this.isDraging = true
       this.lastX = e.clientX
