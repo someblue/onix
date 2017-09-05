@@ -1,21 +1,22 @@
 <template>
-  <div id="app" class="percent-100-wh">
-    <router-view></router-view>
-  </div>
+    <div id="app"
+        class="percent-100-wh">
+        <router-view></router-view>
+    </div>
 </template>
 
 <script>
 export default {
-  name: 'app'
+    name: 'app',
 }
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
 }
 </style>

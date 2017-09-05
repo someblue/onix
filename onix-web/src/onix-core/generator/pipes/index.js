@@ -3,9 +3,9 @@ import go from './go'
 import ts from './ts'
 
 var pipes = [
-  ...common,
-  ...go,
-  ...ts,
+    ...common,
+    ...go,
+    ...ts,
 ]
 
 export default pipes

@@ -5,11 +5,11 @@ import Giant from '@/components/giant'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'Onix',
-      component: Giant,
-    },
-  ],
+    routes: [
+        {
+            path: '/',
+            name: 'Onix',
+            component: Giant,
+        },
+    ],
 })
