@@ -51,11 +51,11 @@ export default {
             // zone zone drag line
             isDraging: false,
             dragingGapIdx: 0,
-            lastX: 0,
             zoneContainerWidth: 0,
-            gap1X: 0,
-            gap2X: 0,
             gapWidth: 10,
+
+            gapPos0: 0.33,
+            gapPos1: 0.66,
         }
     },
     computed: {
@@ -66,24 +66,22 @@ export default {
         },
         zone1WidthStyle: function() {
             return {
-                width: this.gap1X + 'px',
+                width: (this.gapPos0 * this.zoneContainerWidth) + 'px',
             }
         },
         zone2WidthStyle: function() {
             return {
-                width: (this.gap2X - (this.gap1X + this.gapWidth)) + 'px',
+                width: ((this.gapPos1 - this.gapPos0) * this.zoneContainerWidth - this.gapWidth) + 'px',
             }
         },
         zone3WidthStyle: function() {
             return {
-                width: (this.zoneContainerWidth - (this.gap2X + this.gapWidth)) + 'px',
+                width: ((1 - this.gapPos1) * this.zoneContainerWidth - this.gapWidth) + 'px',
             }
         },
     },
     mounted: function() {
         this.zoneContainerWidth = this.$refs.zoneContainer.clientWidth
-        this.gap1X = this.zoneContainerWidth * 1 / 3
-        this.gap2X = this.zoneContainerWidth * 2 / 3
         window.addEventListener('resize', this.resizing)
     },
     beforeDestroy: function() {
@@ -95,30 +93,29 @@ export default {
             if (w === this.zoneContainerWidth) {
                 return
             }
-            this.gap1X = this.gap1X / this.zoneContainerWidth * w
-            this.gap2X = this.gap2X / this.zoneContainerWidth * w
             this.zoneContainerWidth = w
         },
         startDrag: function(e, gapIdx) {
             this.isDraging = true
-            this.lastX = e.clientX
             this.dragingGapIdx = gapIdx
         },
         draging: function(e) {
             if (this.dragingGapIdx) {
-                var dx = e.clientX - this.lastX
-                this.lastX = e.clientX
+                var offsetX = e.pageX - this.$refs.zoneContainer.offsetLeft
+                offsetX -= this.gapWidth / 2; // for middle align mouse on the gap
                 if (this.dragingGapIdx === 1) {
-                    this.gap1X = lodash.clamp(
-                        this.gap1X + dx,
+                    this.gapPos0 = 1.0 * lodash.clamp(
+                        offsetX,
                         0,
-                        this.gap2X - this.gapWidth)
+                        this.gapPos1 * this.zoneContainerWidth - this.gapWidth,
+                    ) / this.zoneContainerWidth
                 }
                 if (this.dragingGapIdx === 2) {
-                    this.gap2X = lodash.clamp(
-                        this.gap2X + dx,
-                        this.gap1X + this.gapWidth,
-                        this.zoneContainerWidth - this.gapWidth)
+                    this.gapPos1 = 1.0 * lodash.clamp(
+                        offsetX,
+                        this.gapPos0 * this.zoneContainerWidth + this.gapWidth,
+                        this.zoneContainerWidth - this.gapWidth,
+                    ) / this.zoneContainerWidth
                 }
             }
         },
