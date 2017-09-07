@@ -15,12 +15,17 @@
                         @click="copy()">
                         Copy
                     </button>
+                    <div class="size-15-w"></div>
+                    <button class="size-100-w size-50-h"
+                        @click="dragResizeZoneHorizonMode = !dragResizeZoneHorizonMode">
+                        Switch Editor Direction
+                    </button>
                 </div>
             </div>
         </div>
 
         <div class="percent-100-w flex-remain-space">
-            <drag-resize-zone>
+            <drag-resize-zone :isHorizon="dragResizeZoneHorizonMode">
                 <div slot="zone1"
                     class="percent-100-wh"
                     @mouseover="overTmpl = true"
@@ -142,6 +147,8 @@ export default {
             schemaName: '',
             openSchemaSelector: false,
             openSchemaSaver: false,
+            // drag resize zone
+            dragResizeZoneHorizonMode: true,
         }
     },
     mounted: function() {

@@ -1,5 +1,6 @@
 <template>
     <div class="percent-100-wh flex-row-aligner"
+        :class="{ 'flex-row-aligner': isHorizon, 'flex-column-aligner': !isHorizon }"
         ref="zoneContainer"
         @mousemove="draging"
         @mouseup="endDrag"
@@ -11,7 +12,8 @@
             <slot name="zone1"></slot>
         </div>
 
-        <div class="percent-100-h gap col-resize-cursor"
+        <div class="gap col-resize-cursor"
+            :style="gapSizeStyle"
             @mousedown="startDrag($event, 1)">
         </div>
 
@@ -21,7 +23,8 @@
             <slot name="zone2"></slot>
         </div>
 
-        <div class="percent-100-h gap col-resize-cursor"
+        <div class="gap col-resize-cursor"
+            :style="gapSizeStyle"
             @mousedown="startDrag($event, 2)">
         </div>
 
@@ -36,7 +39,6 @@
 
 <style>
 .gap {
-    width: 10px;
     background-color: #dddee1;
 }
 </style>
@@ -46,43 +48,89 @@ import lodash from 'lodash'
 
 export default {
     name: 'drag-resize-zone',
+    props: {
+        isHorizon: {
+            type: Boolean,
+            default: true,
+        }
+    },
     data() {
         return {
             // zone zone drag line
             isDraging: false,
             dragingGapIdx: 0,
             zoneContainerWidth: 0,
-            gapWidth: 10,
+            zoneContainerHeight: 0,
+            gapSize: 10,
 
             gapPos0: 0.33,
             gapPos1: 0.66,
         }
     },
     computed: {
-        gapWidthStyle: function() {
-            return {
-                width: this.gapWidth + 'px',
+        gapSizeStyle: function() {
+            console.log('gap: ', this.zoneContainerHeight);
+            if (this.isHorizon) {
+                return {
+                    width: this.gapSize + 'px',
+                    height: this.zoneContainerHeight + 'px',
+                }
+            } else {
+                return {
+                    width: this.zoneContainerWidth + 'px',
+                    height: this.gapSize + 'px',
+                }
             }
         },
         zone1WidthStyle: function() {
-            return {
-                width: (this.gapPos0 * this.zoneContainerWidth) + 'px',
+            if (this.isHorizon) {
+                return {
+                    width: (this.gapPos0 * this.zoneContainerWidth) + 'px',
+                    height: this.zoneContainerHeight + 'px',
+                }
+            } else {
+                return {
+                    width: this.zoneContainerWidth + 'px',
+                    height: (this.gapPos0 * this.zoneContainerHeight) + 'px',
+                }
             }
         },
         zone2WidthStyle: function() {
-            return {
-                width: ((this.gapPos1 - this.gapPos0) * this.zoneContainerWidth - this.gapWidth) + 'px',
+            if (this.isHorizon) {
+                return {
+                    width: ((this.gapPos1 - this.gapPos0) * this.zoneContainerWidth - this.gapSize) + 'px',
+                    height: this.zoneContainerHeight + 'px',
+                }
+            } else {
+                return {
+                    width: this.zoneContainerWidth + 'px',
+                    height: ((this.gapPos1 - this.gapPos0) * this.zoneContainerHeight - this.gapSize) + 'px',
+                }
             }
         },
         zone3WidthStyle: function() {
-            return {
-                width: ((1 - this.gapPos1) * this.zoneContainerWidth - this.gapWidth) + 'px',
+            if (this.isHorizon) {
+                return {
+                    width: ((1 - this.gapPos1) * this.zoneContainerWidth - this.gapSize) + 'px',
+                    height: this.zoneContainerHeight + 'px',
+                }
+            } else {
+                return {
+                    width: this.zoneContainerWidth + 'px',
+                    height: ((1 - this.gapPos1) * this.zoneContainerHeight - this.gapSize) + 'px',
+                }
             }
         },
     },
     mounted: function() {
-        this.zoneContainerWidth = this.$refs.zoneContainer.clientWidth
         window.addEventListener('resize', this.resizing)
+
+        // hack the zone container client height return 0
+        // should be replace by some better solution
+        setTimeout(() => {
+            this.zoneContainerWidth = this.$refs.zoneContainer.clientWidth
+            this.zoneContainerHeight = this.$refs.zoneContainer.clientHeight
+        }, 1);
     },
     beforeDestroy: function() {
         window.removeEventListener('resize', this.resizing)
@@ -90,10 +138,12 @@ export default {
     methods: {
         resizing: function() {
             var w = this.$refs.zoneContainer.clientWidth
-            if (w === this.zoneContainerWidth) {
+            var h = this.$refs.zoneContainer.clientHeight
+            if (w === this.zoneContainerWidth && h === this.zoneContainerHeight) {
                 return
             }
             this.zoneContainerWidth = w
+            this.zoneContainerHeight = h
         },
         startDrag: function(e, gapIdx) {
             this.isDraging = true
@@ -101,21 +151,29 @@ export default {
         },
         draging: function(e) {
             if (this.dragingGapIdx) {
-                var offsetX = e.pageX - this.$refs.zoneContainer.offsetLeft
-                offsetX -= this.gapWidth / 2; // for middle align mouse on the gap
+
+                var offset = this.isHorizon ?
+                    e.pageX - this.$refs.zoneContainer.offsetLeft :
+                    e.pageY - this.$refs.zoneContainer.offsetTop
+
+                var containerSize = this.isHorizon ?
+                    this.zoneContainerWidth :
+                    this.zoneContainerHeight
+
+                offset -= this.gapSize / 2; // for middle align mouse on the gap
                 if (this.dragingGapIdx === 1) {
                     this.gapPos0 = 1.0 * lodash.clamp(
-                        offsetX,
+                        offset,
                         0,
-                        this.gapPos1 * this.zoneContainerWidth - this.gapWidth,
-                    ) / this.zoneContainerWidth
+                        this.gapPos1 * containerSize - this.gapSize,
+                    ) / containerSize
                 }
                 if (this.dragingGapIdx === 2) {
                     this.gapPos1 = 1.0 * lodash.clamp(
-                        offsetX,
-                        this.gapPos0 * this.zoneContainerWidth + this.gapWidth,
-                        this.zoneContainerWidth - this.gapWidth,
-                    ) / this.zoneContainerWidth
+                        offset,
+                        this.gapPos0 * containerSize + this.gapSize,
+                        containerSize - this.gapSize,
+                    ) / containerSize
                 }
             }
         },
