@@ -1,11 +1,11 @@
 <template>
-    <div class="flex-column-aligner percent-100-wh">
-        <div class="percent-100-w size-100-h vh-center-aligner">
-            <div class="h-center-aligner">
+    <div class="flex-column-align pc-100-wh">
+        <div class="pc-100-w size-100-h vh-center-align">
+            <div class="h-center-align">
                 <a href="https://aui.github.io/art-template/docs/syntax.html"
                     target="_blank">Template Usage</a>
 
-                <div class="flex-row-aligner">
+                <div class="flex-row-align">
                     <button class="size-100-w size-50-h"
                         @click="generate()">
                         Generate!
@@ -24,18 +24,18 @@
             </div>
         </div>
 
-        <div class="percent-100-w flex-remain-space">
+        <div class="pc-100-w flex-remain-space">
             <drag-resize-zone :isHorizon="dragResizeZoneHorizonMode">
                 <div slot="zone1"
-                    class="percent-100-wh"
+                    class="pc-100-wh"
                     @mouseover="overTmpl = true"
                     @mouseleave="overTmpl = false">
-                    <code-editor class="percent-100-wh"
+                    <code-editor class="pc-100-wh"
                         :id="'template'"
                         :content.sync="templateEditorContent"
                         @update:content="onTemplateEditorContentChange">
                     </code-editor>
-                    <div class="abs-pos z-idx-1 top-0 right-0 flex-row-aligner">
+                    <div class="abs-pos z-idx-1 top-0 right-0 flex-row-align">
                         <i-button shape="circle"
                             icon="ios-copy"
                             v-show="overTmpl"
@@ -50,16 +50,16 @@
                 </div>
 
                 <div slot="zone2"
-                    class="percent-100-wh"
+                    class="pc-100-wh"
                     @mouseover="overSchema = true"
                     @mouseleave="overSchema = false">
-                    <code-editor class="percent-100-wh"
+                    <code-editor class="pc-100-wh"
                         :id="'schema'"
                         language="javascript"
                         :content.sync="schemaEditorContent"
                         @update:content="onSchemaEditorContentChange">
                     </code-editor>
-                    <div class="abs-pos z-idx-1 top-0 right-0 flex-row-aligner">
+                    <div class="abs-pos z-idx-1 top-0 right-0 flex-row-align">
                         <i-button shape="circle"
                             icon="ios-copy"
                             v-show="overSchema"
@@ -74,8 +74,8 @@
                 </div>
 
                 <div slot="zone3"
-                    class="percent-100-wh">
-                    <code-editor class="percent-100-wh"
+                    class="pc-100-wh">
+                    <code-editor class="pc-100-wh"
                         :id="'result'"
                         :content.sync="resultEditorContent">
                     </code-editor>

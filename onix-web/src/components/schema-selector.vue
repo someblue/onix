@@ -1,12 +1,12 @@
 <template>
-    <Modal class-name="v-center-aligner"
+    <Modal class-name="v-center-align"
         title="Schema Selector"
         width="80"
         :styles="{top: '0px'}"
         :value="value"
         @input="onModalValue"
         @on-ok="onSelect">
-        <div class="percent-100-w vh-70-h">
+        <div class="pc-100-w vh-70-h">
             <i-select v-model="schemaName"
                 filterable>
                 <Option v-for="e in schemasModel.schemas"
@@ -15,7 +15,7 @@
                     {{ e.name }}
                 </Option>
             </i-select>
-            <div class="percent-100-wh">
+            <div class="pc-100-wh">
                 <code-editor :id="'schema-selector'"
                     :content="schemaContent">
                 </code-editor>

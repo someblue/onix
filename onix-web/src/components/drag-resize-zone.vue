@@ -1,12 +1,12 @@
 <template>
-    <div class="percent-100-wh flex-row-aligner"
-        :class="{ 'flex-row-aligner': isHorizon, 'flex-column-aligner': !isHorizon }"
+    <div class="pc-100-wh flex-row-align"
+        :class="{ 'flex-row-align': isHorizon, 'flex-column-align': !isHorizon }"
         ref="zoneContainer"
         @mousemove="draging"
         @mouseup="endDrag"
         @mouseleave="endDrag">
 
-        <div class="percent-100-h rel-pos"
+        <div class="pc-100-h rel-pos"
             ref="zone1"
             :style="zone1WidthStyle">
             <slot name="zone1"></slot>
@@ -17,7 +17,7 @@
             @mousedown="startDrag($event, 1)">
         </div>
 
-        <div class="percent-100-h rel-pos"
+        <div class="pc-100-h rel-pos"
             :style="zone2WidthStyle"
             ref="zone2">
             <slot name="zone2"></slot>
@@ -28,7 +28,7 @@
             @mousedown="startDrag($event, 2)">
         </div>
 
-        <div class="percent-100-h"
+        <div class="pc-100-h"
             :style="zone3WidthStyle"
             ref="zone3">
             <slot name="zone3"></slot>

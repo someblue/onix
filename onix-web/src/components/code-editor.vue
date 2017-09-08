@@ -1,6 +1,6 @@
 <template>
     <div :id="id"
-        class="percent-100-wh">
+        class="pc-100-wh">
     </div>
 </template>
 

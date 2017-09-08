@@ -1,6 +1,6 @@
 <template>
     <div id="app"
-        class="percent-100-wh">
+        class="pc-100-wh">
         <router-view></router-view>
     </div>
 </template>

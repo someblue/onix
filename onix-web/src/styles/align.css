@@ -1,4 +1,4 @@
-.h-center-aligner {
+.h-center-align {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
@@ -7,7 +7,7 @@
   align-items: center;
 }
 
-.v-center-aligner {
+.v-center-align {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
@@ -20,7 +20,7 @@
   align-items: center;
 }
 
-.vh-center-aligner {
+.vh-center-align {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
@@ -33,7 +33,7 @@
   justify-content: center;
 }
 
-.h-space-between-aligner {
+.h-space-between-align {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
@@ -42,7 +42,7 @@
   justify-content: space-between;
 }
 
-.v-space-between-aligner {
+.v-space-between-align {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
@@ -55,12 +55,12 @@
   flex: 1;
 }
 
-.flex-row-aligner {
+.flex-row-align {
   display: flex;
   flex-direction: row;
 }
 
-.flex-column-aligner {
+.flex-column-align {
   display: flex;
   flex-direction: column;
 }
