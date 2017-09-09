@@ -1,30 +1,23 @@
 <template>
-    <div class="flex-column-align pc-100-wh">
-        <div class="pc-100-w size-100-h vh-center-align">
-            <div class="h-center-align">
-                <a href="https://aui.github.io/art-template/docs/syntax.html"
-                    target="_blank">Template Usage</a>
-
-                <div class="flex-row-align">
-                    <button class="size-100-w size-50-h"
-                        @click="generate()">
+    <o-layout>
+        <o-layout-header slot="header" title="Onix">
+            <div slot="center" class="flex-row-align">
+                <ButtonGroup>
+                    <i-button type="ghost" class="header-btn-font" @click="generate()">
                         Generate!
-                    </button>
-                    <div class="size-15-w"></div>
-                    <button class="size-100-w size-50-h"
-                        @click="copy()">
+                    </i-button>
+                    <i-button type="ghost" class="header-btn-font" @click="copy()">
                         Copy
-                    </button>
-                    <div class="size-15-w"></div>
-                    <button class="size-100-w size-50-h"
-                        @click="dragResizeZoneHorizonMode = !dragResizeZoneHorizonMode">
-                        Switch Editor Direction
-                    </button>
-                </div>
+                    </i-button>
+                </ButtonGroup>
             </div>
-        </div>
+            <div slot="right" class="flex-row-align">
+                <a href="https://aui.github.io/art-template/docs/syntax.html"
+                    target="_blank">TemplateUsage</a>
+            </div>
+        </o-layout-header>
 
-        <div class="pc-100-w flex-remain-space">
+        <div class="pc-100-wh" slot="body">
             <drag-resize-zone :isHorizon="dragResizeZoneHorizonMode">
                 <div slot="zone1"
                     class="pc-100-wh"
@@ -100,17 +93,26 @@
                 @on-select="onSelectSchema">
             </schema-selector>
         </div>
-    </div>
+    </o-layout>
 </template>
 
 <style>
-.gap {
-    width: 10px;
-    background-color: #dddee1;
+.header-btn-font {
+    color: #ffffff;
 }
+.header-btn-font:hover {
+    color: #57a3f3;
+}
+.header-btn-font:active {
+    color: #2b85e4;
+}
+
 </style>
 
 <script>
+import OLayout from '@/components/layout/o-layout'
+import OLayoutHeader from '@/components/layout/o-layout-header'
+import OLayoutFooter from '@/components/layout/o-layout-footer'
 import DragResizeZone from './drag-resize-zone'
 import CodeEditor from './code-editor.vue'
 import TemplateSaver from './template-saver.vue'
@@ -125,12 +127,15 @@ import copyToClipboard from 'util/clipboard.js'
 export default {
     name: 'giant',
     components: {
-        DragResizeZone,
-        CodeEditor,
-        TemplateSaver,
-        TemplateSelector,
-        SchemaSaver,
-        SchemaSelector,
+        'o-layout': OLayout,
+        'o-layout-header': OLayoutHeader,
+        'o-layout-footer': OLayoutFooter,
+        'drag-resize-zone': DragResizeZone,
+        'code-editor': CodeEditor,
+        'template-saver': TemplateSaver,
+        'template-selector': TemplateSelector,
+        'schema-saver': SchemaSaver,
+        'schema-selector': SchemaSelector,
     },
     data() {
         return {
