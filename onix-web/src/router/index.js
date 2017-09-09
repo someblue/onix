@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Giant from '@/components/giant'
+import Workspace from '@/components/workspace/workspace'
 import LayoutDemo from '@/components/layout/demo'
 
 Vue.use(Router)
@@ -10,7 +10,7 @@ export default new Router({
         {
             path: '/',
             name: 'onix',
-            component: Giant,
+            component: Workspace,
         },
         {
             path: '/layout',

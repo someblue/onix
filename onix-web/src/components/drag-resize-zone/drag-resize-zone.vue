@@ -69,7 +69,6 @@ export default {
     },
     computed: {
         gapSizeStyle: function() {
-            console.log('gap: ', this.zoneContainerHeight);
             if (this.isHorizon) {
                 return {
                     width: this.gapSize + 'px',

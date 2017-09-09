@@ -113,8 +113,8 @@
 import OLayout from '@/components/layout/o-layout'
 import OLayoutHeader from '@/components/layout/o-layout-header'
 import OLayoutFooter from '@/components/layout/o-layout-footer'
-import DragResizeZone from './drag-resize-zone'
-import CodeEditor from './code-editor.vue'
+import DragResizeZone from '@/components/drag-resize-zone/drag-resize-zone'
+import CodeEditor from '@/components/code-editor/code-editor.vue'
 import TemplateSaver from './template-saver.vue'
 import TemplateSelector from './template-selector.vue'
 import SchemaSaver from './schema-saver.vue'
@@ -125,7 +125,7 @@ import generator from 'onix-core/generator'
 import copyToClipboard from 'util/clipboard.js'
 
 export default {
-    name: 'giant',
+    name: 'workspace',
     components: {
         'o-layout': OLayout,
         'o-layout-header': OLayoutHeader,

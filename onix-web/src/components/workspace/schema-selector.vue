@@ -1,23 +1,23 @@
 <template>
     <Modal class-name="v-center-align"
-        title="Template Selector"
+        title="Schema Selector"
         width="80"
         :styles="{top: '0px'}"
         :value="value"
         @input="onModalValue"
         @on-ok="onSelect">
         <div class="pc-100-w vh-70-h">
-            <i-select v-model="tmplName"
+            <i-select v-model="schemaName"
                 filterable>
-                <Option v-for="e in templatesModel.templates"
+                <Option v-for="e in schemasModel.schemas"
                     :value="e.name"
                     :key="e.name">
                     {{ e.name }}
                 </Option>
             </i-select>
             <div class="pc-100-wh">
-                <code-editor :id="'template-selector'"
-                    :content="tmplContent">
+                <code-editor :id="'schema-selector'"
+                    :content="schemaContent">
                 </code-editor>
             </div>
         </div>
@@ -25,11 +25,11 @@
 </template>
 
 <script>
-import CodeEditor from './code-editor.vue'
-import templatesModel from '@/model/templates.model.js'
+import CodeEditor from '@/components/code-editor/code-editor.vue'
+import schemasModel from '@/model/schemas.model.js'
 
 export default {
-    name: 'template-selector',
+    name: 'schema-selector',
     components: {
         CodeEditor,
     },
@@ -41,14 +41,14 @@ export default {
     },
     data() {
         return {
-            templatesModel: templatesModel,
-            tmplName: '',
-            tmplContent: '',
+            schemasModel: schemasModel,
+            schemaName: '',
+            schemaContent: '',
         }
     },
     watch: {
-        tmplName: function(val) {
-            this.tmplContent = this.templatesModel.getTemplate(val)
+        schemaName: function(val) {
+            this.schemaContent = this.schemasModel.getSchema(val)
         },
     },
     methods: {
@@ -56,7 +56,7 @@ export default {
             this.$emit('input', e)
         },
         onSelect: function() {
-            this.$emit('on-select', { name: this.tmplName, content: this.tmplContent })
+            this.$emit('on-select', { name: this.schemaName, content: this.schemaContent })
         },
     },
 }
