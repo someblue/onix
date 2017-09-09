@@ -51,6 +51,10 @@
   justify-content: space-between;
 }
 
+.flex-1 {
+  flex: 1;
+}
+
 .flex-remain-space {
   flex: 1;
 }
@@ -60,9 +64,19 @@
   flex-direction: row;
 }
 
+.flex-row-reverse-align {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
 .flex-column-align {
   display: flex;
   flex-direction: column;
+}
+
+.flex-column-reverse-align {
+  display: flex;
+  flex-direction: column-reverse;
 }
 
 .top-0 {
