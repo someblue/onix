@@ -11,7 +11,7 @@
 
 <style scoped>
     .ft-h {
-        height: 40px;
+        height: 20px;
     }
 
     .ft-bg {

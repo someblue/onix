@@ -1,6 +1,8 @@
 <template>
-    <div :id="id"
-        class="pc-100-wh">
+    <div class="pc-100-wh flex-column-align">
+        <slot name="header"></slot>
+        <div :id="id" class="flex-1"></div>
+        <slot name="footer"></slot>
     </div>
 </template>
 
@@ -9,6 +11,13 @@ import ace from 'brace'
 import 'brace/mode/javascript'
 import 'brace/mode/plain_text'
 import 'brace/theme/tomorrow'
+import 'brace/theme/clouds_midnight'
+import 'brace/theme/idle_fingers'
+import 'brace/theme/merbivore_soft'
+import 'brace/theme/monokai'
+import 'brace/theme/pastel_on_dark'
+import 'brace/theme/tomorrow_night'
+import 'brace/theme/tomorrow_night_eighties'
 
 // TODO: add readonly option
 export default {
@@ -54,6 +63,9 @@ export default {
             var editor = ace.edit(id)
             editor.setTheme('ace/theme/tomorrow')
             editor.getSession().setMode(`ace/mode/${language}`)
+            editor.setOptions({
+                maxLines: Infinity
+            });
             editor.getSession().on('change', (e) => {
                 this.currentContent = this.editor.getValue()
                 this.$emit('update:content', this.currentContent)

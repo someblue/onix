@@ -3,11 +3,15 @@
         <o-layout-header slot="header" title="Onix">
             <div slot="center" class="flex-row-align">
                 <ButtonGroup>
-                    <i-button type="ghost" class="header-btn-font" @click="generate()">
+                    <i-button type="ghost" class="ghost-btn-font" @click="generate()">
                         Generate!
                     </i-button>
-                    <i-button type="ghost" class="header-btn-font" @click="copy()">
+                    <i-button type="ghost" class="ghost-btn-font" @click="copy()">
                         Copy
+                    </i-button>
+                    <i-button type="ghost" class="ghost-btn-font"
+                        @click="dragResizeZoneHorizonMode = !dragResizeZoneHorizonMode">
+                        SwitchEditor
                     </i-button>
                 </ButtonGroup>
             </div>
@@ -27,43 +31,53 @@
                         :id="'template'"
                         :content.sync="templateEditorContent"
                         @update:content="onTemplateEditorContentChange">
+                        <code-editor-header slot="header" title="Template">
+                            <ButtonGroup>
+                                <i-button 
+                                    icon="ios-copy"
+                                    size="small"
+                                    type="ghost"
+                                    class="ghost-btn-font"
+                                    @click="openTemplateSaver = true">
+                                </i-button>
+                                <i-button
+                                    icon="more"
+                                    size="small"
+                                    type="ghost"
+                                    class="ghost-btn-font"
+                                    @click="openTemplateSelector = true">
+                                </i-button>
+                            </ButtonGroup>
+                        </code-editor-header>
                     </code-editor>
-                    <div class="abs-pos z-idx-1 top-0 right-0 flex-row-align">
-                        <i-button shape="circle"
-                            icon="ios-copy"
-                            v-show="overTmpl"
-                            @click="openTemplateSaver = true">
-                        </i-button>
-                        <i-button shape="circle"
-                            icon="more"
-                            v-show="overTmpl"
-                            @click="openTemplateSelector = true">
-                        </i-button>
-                    </div>
                 </div>
 
                 <div slot="zone2"
-                    class="pc-100-wh"
-                    @mouseover="overSchema = true"
-                    @mouseleave="overSchema = false">
+                    class="pc-100-wh">
                     <code-editor class="pc-100-wh"
                         :id="'schema'"
                         language="javascript"
                         :content.sync="schemaEditorContent"
                         @update:content="onSchemaEditorContentChange">
+                        <code-editor-header slot="header" title="Schema">
+                            <ButtonGroup>
+                                <i-button 
+                                    icon="ios-copy"
+                                    size="small"
+                                    type="ghost"
+                                    class="ghost-btn-font"
+                                    @click="openSchemaSaver = true">
+                                </i-button>
+                                <i-button
+                                    icon="more"
+                                    size="small"
+                                    type="ghost"
+                                    class="ghost-btn-font"
+                                    @click="openSchemaSelector = true">
+                                </i-button>
+                            </ButtonGroup>
+                        </code-editor-header>
                     </code-editor>
-                    <div class="abs-pos z-idx-1 top-0 right-0 flex-row-align">
-                        <i-button shape="circle"
-                            icon="ios-copy"
-                            v-show="overSchema"
-                            @click="openSchemaSaver = true">
-                        </i-button>
-                        <i-button shape="circle"
-                            icon="more"
-                            v-show="overSchema"
-                            @click="openSchemaSelector = true">
-                        </i-button>
-                    </div>
                 </div>
 
                 <div slot="zone3"
@@ -71,6 +85,8 @@
                     <code-editor class="pc-100-wh"
                         :id="'result'"
                         :content.sync="resultEditorContent">
+                        <code-editor-header slot="header" title="Code">
+                        </code-editor-header>
                     </code-editor>
                 </div>
             </drag-resize-zone>
@@ -93,20 +109,22 @@
                 @on-select="onSelectSchema">
             </schema-selector>
         </div>
+
+        <o-layout-footer slot="footer">
+        </o-layout-footer>
     </o-layout>
 </template>
 
 <style>
-.header-btn-font {
+.ghost-btn-font {
     color: #ffffff;
 }
-.header-btn-font:hover {
+.ghost-btn-font:hover {
     color: #57a3f3;
 }
-.header-btn-font:active {
+.ghost-btn-font:active {
     color: #2b85e4;
 }
-
 </style>
 
 <script>
@@ -114,11 +132,12 @@ import OLayout from '@/components/layout/o-layout'
 import OLayoutHeader from '@/components/layout/o-layout-header'
 import OLayoutFooter from '@/components/layout/o-layout-footer'
 import DragResizeZone from '@/components/drag-resize-zone/drag-resize-zone'
-import CodeEditor from '@/components/code-editor/code-editor.vue'
-import TemplateSaver from './template-saver.vue'
-import TemplateSelector from './template-selector.vue'
-import SchemaSaver from './schema-saver.vue'
-import SchemaSelector from './schema-selector.vue'
+import CodeEditor from '@/components/code-editor/code-editor'
+import CodeEditorHeader from '@/components/code-editor/code-editor-header'
+import TemplateSaver from './template-saver'
+import TemplateSelector from './template-selector'
+import SchemaSaver from './schema-saver'
+import SchemaSelector from './schema-selector'
 
 import store from 'store'
 import generator from 'onix-core/generator'
@@ -132,6 +151,7 @@ export default {
         'o-layout-footer': OLayoutFooter,
         'drag-resize-zone': DragResizeZone,
         'code-editor': CodeEditor,
+        'code-editor-header': CodeEditorHeader,
         'template-saver': TemplateSaver,
         'template-selector': TemplateSelector,
         'schema-saver': SchemaSaver,

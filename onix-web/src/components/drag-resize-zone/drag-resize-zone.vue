@@ -39,7 +39,7 @@
 
 <style>
 .gap {
-    background-color: #dddee1;
+    background-color: #8d919c;
 }
 </style>
 
