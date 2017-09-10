@@ -48,16 +48,21 @@ export default {
         },
     },
     mounted: function() {
-        this.editor = this.setupEditor(this.id, this.language)
-        this.bindContentProperty(this.editor)
+        window.setTimeout(() => {
+            this.editor = this.setupEditor(this.id, this.language)
+            this.bindContentProperty(this.editor)
+            this.setCurrentContent(this.content)
+        }, 10)
     },
     methods: {
         setCurrentContent: function(val) {
-            if (val === this.currentContent) {
+            if (this.editor && val === this.editor.getValue()) {
                 return
             }
             this.currentContent = val
-            this.editor.setValue(val, 1)
+            if (this.editor) {
+                this.editor.setValue(val, 1)
+            }
         },
         setupEditor: function(id, language) {
             var editor = ace.edit(id)
