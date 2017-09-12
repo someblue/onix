@@ -1,27 +1,36 @@
 <template>
     <o-layout>
-        <o-layout-header slot="header" title="Onix">
-            <div slot="center" class="flex-row-align">
+        <o-layout-header slot="header"
+            title="Onix">
+            <div slot="center"
+                class="flex-row-align">
                 <ButtonGroup>
-                    <i-button type="ghost" class="ghost-btn-font" @click="generate()">
+                    <i-button type="ghost"
+                        class="ghost-btn-font"
+                        @click="generate()">
                         Generate!
                     </i-button>
-                    <i-button type="ghost" class="ghost-btn-font" @click="copy()">
+                    <i-button type="ghost"
+                        class="ghost-btn-font"
+                        @click="copy()">
                         Copy
                     </i-button>
-                    <i-button type="ghost" class="ghost-btn-font"
+                    <i-button type="ghost"
+                        class="ghost-btn-font"
                         @click="dragResizeZoneHorizonMode = !dragResizeZoneHorizonMode">
                         SwitchEditor
                     </i-button>
                 </ButtonGroup>
             </div>
-            <div slot="right" class="flex-row-align">
+            <div slot="right"
+                class="flex-row-align">
                 <a href="https://aui.github.io/art-template/docs/syntax.html"
                     target="_blank">TemplateUsage</a>
             </div>
         </o-layout-header>
 
-        <div class="pc-100-wh" slot="body">
+        <div class="pc-100-wh"
+            slot="body">
             <drag-resize-zone :isHorizon="dragResizeZoneHorizonMode">
                 <div slot="zone1"
                     class="pc-100-wh"
@@ -31,17 +40,16 @@
                         :id="'template'"
                         :content.sync="templateEditorContent"
                         @update:content="onTemplateEditorContentChange">
-                        <code-editor-header slot="header" title="Template">
+                        <code-editor-header slot="header"
+                            title="Template">
                             <ButtonGroup>
-                                <i-button 
-                                    icon="ios-copy"
+                                <i-button icon="ios-copy"
                                     size="small"
                                     type="ghost"
                                     class="ghost-btn-font"
                                     @click="openTemplateSaver = true">
                                 </i-button>
-                                <i-button
-                                    icon="more"
+                                <i-button icon="more"
                                     size="small"
                                     type="ghost"
                                     class="ghost-btn-font"
@@ -59,17 +67,16 @@
                         language="javascript"
                         :content.sync="schemaEditorContent"
                         @update:content="onSchemaEditorContentChange">
-                        <code-editor-header slot="header" title="Schema">
+                        <code-editor-header slot="header"
+                            title="Schema">
                             <ButtonGroup>
-                                <i-button 
-                                    icon="ios-copy"
+                                <i-button icon="ios-copy"
                                     size="small"
                                     type="ghost"
                                     class="ghost-btn-font"
                                     @click="openSchemaSaver = true">
                                 </i-button>
-                                <i-button
-                                    icon="more"
+                                <i-button icon="more"
                                     size="small"
                                     type="ghost"
                                     class="ghost-btn-font"
@@ -85,7 +92,8 @@
                     <code-editor class="pc-100-wh"
                         :id="'result'"
                         :content.sync="resultEditorContent">
-                        <code-editor-header slot="header" title="Code">
+                        <code-editor-header slot="header"
+                            title="Code">
                         </code-editor-header>
                     </code-editor>
                 </div>
@@ -111,6 +119,14 @@
         </div>
 
         <o-layout-footer slot="footer">
+            <div slot="right">
+                <i-button size="small"
+                    type="ghost"
+                    class="ghost-btn-font"
+                    @click="onExport">
+                    export
+                </i-button>
+            </div>
         </o-layout-footer>
     </o-layout>
 </template>
@@ -119,9 +135,11 @@
 .ghost-btn-font {
     color: #ffffff;
 }
+
 .ghost-btn-font:hover {
     color: #57a3f3;
 }
+
 .ghost-btn-font:active {
     color: #2b85e4;
 }
@@ -138,10 +156,13 @@ import TemplateSaver from './template-saver'
 import TemplateSelector from './template-selector'
 import SchemaSaver from './schema-saver'
 import SchemaSelector from './schema-selector'
+import templatesModel from '@/model/templates.model.js'
+import schemasModel from '@/model/schemas.model.js'
 
 import store from 'store'
 import generator from 'onix-core/generator'
 import copyToClipboard from 'util/clipboard.js'
+import FileUtil from 'util/file'
 
 export default {
     name: 'workspace',
@@ -220,6 +241,16 @@ export default {
         },
         onSchemaEditorContentChange: function(e) {
             store.set('schema', e)
+        },
+        onExport() {
+            var content = {
+                'template': store.get('template'),
+                'schema': store.get('schema'),
+                'templates': templatesModel.templates,
+                'schemas': schemasModel.schemas,
+            }
+            console.log('exporting: ', content)
+            FileUtil.downloadFile('onix-export.json', JSON.stringify(content))
         },
     },
 }
