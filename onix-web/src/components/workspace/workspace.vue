@@ -119,13 +119,22 @@
         </div>
 
         <o-layout-footer slot="footer">
-            <div slot="right">
-                <i-button size="small"
-                    type="ghost"
-                    class="ghost-btn-font"
-                    @click="onExport">
-                    export
-                </i-button>
+            <div slot="right"
+                class="flex-row-align">
+                <ButtonGroup>
+                    <i-button size="small"
+                        type="ghost"
+                        class="ghost-btn-font"
+                        @click="onImport">
+                        import
+                    </i-button>
+                    <i-button size="small"
+                        type="ghost"
+                        class="ghost-btn-font"
+                        @click="onExport">
+                        export
+                    </i-button>
+                </ButtonGroup>
             </div>
         </o-layout-footer>
     </o-layout>
@@ -241,6 +250,32 @@ export default {
         },
         onSchemaEditorContentChange: function(e) {
             store.set('schema', e)
+        },
+        onImport() {
+            FileUtil.uploadFile().subscribe(fileContent => {
+                try {
+                    var content = JSON.parse(fileContent) // may cause exception
+
+                    if (content.template) {
+                        store.set('template', content.template)
+                        this.templateEditorContent = content.template
+                    }
+                    if (content.schema) {
+                        store.set('schema', content.schema)
+                        this.schemaEditorContent = content.schema
+                    }
+                    if (content.templates) {
+                        templatesModel.setTemplates(content.templates)
+                    }
+                    if (content.schemas) {
+                        schemasModel.setSchemas(content.schemas)
+                    }
+
+                    alert('import success!')
+                } catch (e) {
+                    alert('parse imported file error: ' + e)
+                }
+            })
         },
         onExport() {
             var content = {
