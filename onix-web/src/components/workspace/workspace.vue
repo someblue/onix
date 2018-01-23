@@ -140,7 +140,7 @@
     </o-layout>
 </template>
 
-<style>
+<style scoped>
 .ghost-btn-font {
     color: #ffffff;
 }

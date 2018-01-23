@@ -34,6 +34,15 @@ var camel = function(str) {
 
 export default [
     {
+        name: 'tsType',
+        func: function(name) {
+            if (name.startsWith('obj:')) {
+                return _.upperFirst(_.camelCase(name.slice('obj:'.length)))
+            }
+            return tsTypeMap[name].t
+        },
+    },
+    {
         name: 'tsEntityProp',
         func: function(p) {
             if (p.d) {
