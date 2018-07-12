@@ -1,23 +1,11 @@
-# ltgen
+# Onix
 
-A tool for code generation based on Vue.js + iView + NodeJs + MongoDB.
+A lightweight code generation tool.
 
-## HOW TO START
+When you are writing some repeat code, you feels tired, and then write down the template and schema, use Onix to generate the code.
 
-```
-npm install
-npm start
-```
+## Onix Components
 
-
-## TODO
-
-- [x] Template set and data set storing in local storage
-- [ ] Template set and data set storing in mongodb via NodeJs server
-- [x] Drag editor split line to resize edit area
-- [x] Switch of vertical/horizontal editor mode
-- [ ] Editable pipes
-- [ ] Account system
-- [ ] User scope template set and data set
-- [ ] Combine of templates
-- [ ] Switch of YAML/JSON data parser
+* onix-core. The code generation framework. Provide API to do generation work.
+* onix-cli. Command line interface to use onix.
+* onix-web. Web app to use onix.
