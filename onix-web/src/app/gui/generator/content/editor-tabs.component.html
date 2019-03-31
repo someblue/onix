@@ -1,0 +1,6 @@
+<div class="container" fxLayout="row">
+    <div *ngFor="let tab of tabs; let i = index" [class.tab-selected]="i === selectedIndex"
+        [class.tab-unselected]="i !== selectedIndex" fxLayout fxLayoutAlign="center center" (click)="selectedIndex = i">
+        {{ tab }}
+    </div>
+</div>

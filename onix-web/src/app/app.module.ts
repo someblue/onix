@@ -10,17 +10,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as NzIcons from '@ant-design/icons-angular/icons';
 import { NgZorroAntdModule, NZ_I18N, en_US, NZ_ICONS } from 'ng-zorro-antd';
+import { MonacoEditorModule } from 'ngx-monaco-editor';
 
 import { AppRoutingModule } from 'app/app-routing.module';
 import { AppComponent } from 'app/app.component';
 import { GeneratorModule } from 'app/gui/generator/generator.module';
 
 registerLocaleData(en);
-
-// Icons on demand.
-// const icons = [
-//   NzIcons.SettingFill,
-// ];
 
 const antDesignIcons = NzIcons as {
   [key: string]: IconDefinition;
@@ -38,6 +34,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     HttpClientModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
+    MonacoEditorModule.forRoot(),
     AppRoutingModule,
     GeneratorModule,
   ],
